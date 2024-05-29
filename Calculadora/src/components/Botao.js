@@ -10,7 +10,7 @@ export default props => {
   if(props.colorido) estilosBotao.push(estilos.botaoColorido)
 
   return (
-    <TouchableHighlight>
+    <TouchableHighlight onPress={() => props.onClick(props.label)}>
         <Text style={estilosBotao}>{props.label}</Text>
     </TouchableHighlight>
   )
@@ -27,6 +27,7 @@ const estilos = StyleSheet.create({
         textAlign: "center",
         borderWidth: 1,
         borderColor: "#888",
+        color: "#808080"
     },
     botaoDuplo: {
       width: width/4 * 2
