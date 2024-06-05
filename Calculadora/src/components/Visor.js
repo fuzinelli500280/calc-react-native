@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native'
 export default props => {
     return(
         <View style={estilos.visor}>
-            <Text style={estilos.valorVisor}>10</Text>
+            <Text style={estilos.valorVisor}>{props.valor}</Text>
         </View>
     )
 }
