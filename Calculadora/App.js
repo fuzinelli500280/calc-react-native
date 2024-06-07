@@ -24,24 +24,47 @@ export default props => {
   const [estadoCalculadora, setEstadoCalculadora] = useState({...estadoInicial})
 
   adicionarDigito = n => {
-    if(n == '.' && estadoCalculadora.valorVisor.includes('.')){
-      return;
-    }
 
     const limparVisor = estadoCalculadora.valorVisor === '0' || estadoCalculadora.limparVisor
     const valorCorrente = limparVisor ? '' : estadoCalculadora.valorVisor
     const valorVisor = valorCorrente + n
 
-    estadoTemp = {...estadoCalculadora, valorVisor, limparVisor: false}
-    setEstadoCalculadora({...estadoTemp})
+
+    if(n !== '.'){
+      const novoValor = parseFloat(valorVisor)
+      const valores = estadoCalculadora.valores
+      valores[estadoCalculadora.posicaoCorrente] = novoValor
+    }
+
+
+    setEstadoCalculadora({...estadoCalculadora, valorVisor, limparVisor: false})
   }
 
   limparMemoria = () => {
-    console.warn("limpar memoria")
+    setEstadoCalculadora({...estadoInicial})
   }
 
   setOperacao = operacao => {
-    console.warn(operacao)
+    if (estadoCalculadora.posicaoCorrente === 0) {
+      setEstadoCalculadora({...estadoCalculadora, operacao, posicaoCorrente: 1, limparVisor: true})
+    } else {
+      const ehIgual = operacao === '='
+      const valores = [...estadoCalculadora.valores]
+      try {
+        valores[0] = eval(`${valores[0]} ${estadoCalculadora.operacao} ${valores[1]}`)
+      } catch (error) {
+        valores[0] = estadoCalculadora.valores[0]
+      }
+
+      valores[1] = 0
+      setEstadoCalculadora({
+        valorVisor: valores[0],
+        operacao: ehIgual ? null : operacao,
+        posicaoCorrente: ehIgual ? 0 : 1,
+        limparVisor: !ehIgual,
+        valores
+      })
+    }
   }
 
   return (
